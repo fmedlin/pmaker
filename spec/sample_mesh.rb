@@ -17,10 +17,12 @@ ns7 = network_set '10.10.103.0/24, 10.10.104.0/24'
 # policies - policy files are only generated for defined servers
 policy_mesh 'encrypt',
   { :encrypt_alg => 'aes',
+    :encrypt_key => '0123456',
     :auth_alg => 'sha1',
+    :auth_key => '987654',
 	  :network_sets => [ns1, ns2, ns3] }
 
 policy_mesh 'drop', { :network_sets => [ns1, ns2, ns3] }
-policy_mesh 'clear', { :network_sets => [ns1, ns4] }
-policy_mesh 'clear', { :network_sets => [ns2, '*'] }
+policy_mesh 'pass', { :network_sets => [ns1, ns4] }
+policy_mesh 'pass', { :network_sets => [ns2, '*'] }
 

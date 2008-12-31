@@ -1,15 +1,17 @@
 require 'singleton'
 require File.dirname(__FILE__) + '/server_pep.rb'
 require File.dirname(__FILE__) + '/network_set.rb'
+require File.dirname(__FILE__) + '/policy.rb'
 
 class PolicyMaker
   include Singleton
   
-  attr_accessor :servers, :network_sets
+  attr_accessor :servers, :network_sets, :policies
   
   def initialize
     @servers = []
     @network_sets = []
+    @policies = []
   end
     
 end
@@ -23,10 +25,12 @@ def server_pep(ipaddr)
 end
 
 def network_set(network)
-  PolicyMaker.instance.network_sets << NetworkSet.new(network)
+  ns = NetworkSet.new(network)
+  PolicyMaker.instance.network_sets << ns
+  return ns
 end
 
 def policy_mesh(mesh_type, options)
-  mesh_type
+  PolicyMaker.instance.policies << Policy.new('mesh', mesh_type, options)
 end
 

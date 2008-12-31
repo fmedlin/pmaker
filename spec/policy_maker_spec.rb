@@ -1,14 +1,15 @@
-require File.dirname(__FILE__) + '/sample_mesh.rb'
-
 require 'rubygems'
 require 'spec'
 
-describe PolicyMaker do
+require File.dirname(__FILE__) + '/sample_mesh.rb'
+
+describe PolicyMaker, "with sample mesh policy" do
   
   before(:all) do
     @pmaker = PolicyMaker.instance
     @servers = @pmaker.servers
     @network_sets = @pmaker.network_sets
+    @policies = @pmaker.policies
   end
   
   it "should add server peps" do
@@ -26,7 +27,23 @@ describe PolicyMaker do
     networks = @network_sets.collect { |ns| ns.network }
     networks.include?('192.168.1.3').should be_true
   end
-    
+  
+  it "should add policies" do
+    @policies.size.should equal(4)
+  end
+  
+  it "should create encrypt, drop and clear policies" do
+    encrypt_policy = @policies.select { |p| p.encrypt? }
+    encrypt_policy.size.should equal(1)
+
+    drop_policy = @policies.select { |p| p.drop? }
+    drop_policy.size.should equal(1)
+
+    pass_policy = @policies.select { |p| p.pass? }
+    pass_policy.size.should equal(2)
+
+  end
+  
 end
 
   
