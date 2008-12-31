@@ -1,9 +1,9 @@
 require 'policy_maker'
 
 # server definitions
-rush = server_pep 'rush'
-elvis = server_pep '192.168.1.1'
-sinatra = server_pep 'sinatra'
+rush = server_pep '192.168.1.1'
+elvis = server_pep '192.168.1.2'
+sinatra = server_pep '192.168.1.3'
 
 # network set definitions
 ns1 = network_set rush

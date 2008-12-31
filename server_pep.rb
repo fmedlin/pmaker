@@ -1,7 +1,7 @@
 class ServerPep
-  attr_accessor :name
+  attr_accessor :ip_addr
   
-  def initialize(name)
-    @name = name
+  def initialize(ip_addr)
+    @ip_addr = ip_addr
   end
 end
