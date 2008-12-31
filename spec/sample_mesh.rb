@@ -1,9 +1,9 @@
 require 'policy_maker'
 
 # server definitions
-rush = server_pep '192.168.1.1'
-elvis = server_pep '192.168.1.2'
-sinatra = server_pep '192.168.1.3'
+rush = server_pep 'rush', '192.168.1.1'
+elvis = server_pep 'elvis', '192.168.1.2'
+sinatra = server_pep 'sinatra', '192.168.1.3'
 
 # network set definitions
 ns1 = network_set rush
@@ -25,4 +25,6 @@ policy_mesh 'encrypt',
 policy_mesh 'drop', { :network_sets => [ns1, ns2, ns3] }
 policy_mesh 'pass', { :network_sets => [ns1, ns4] }
 policy_mesh 'pass', { :network_sets => [ns2, '*'] }
+
+generate_policies
 

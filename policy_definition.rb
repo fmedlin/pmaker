@@ -1,9 +1,11 @@
-class Policy
+class PolicyDefinition
   attr_accessor :topology, :action
   attr_accessor :encrypt_alg, :encrypt_key, :auth_alg, :auth_key
   
   def initialize(topology, action, options)
+    @topology = topology
     @action = action
+    options.each_pair { |k, v| instance_variable_set "@#{k}", v }
   end
   
   def encrypt?
