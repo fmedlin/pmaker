@@ -1,0 +1,2 @@
+class PolicyRule
+end

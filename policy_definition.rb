@@ -1,6 +1,9 @@
+require 'server_pep'
+
 class PolicyDefinition
   attr_accessor :topology, :action
   attr_accessor :encrypt_alg, :encrypt_key, :auth_alg, :auth_key
+  attr_accessor :network_sets
   
   def initialize(topology, action, options)
     @topology = topology
@@ -18,6 +21,15 @@ class PolicyDefinition
   
   def pass?
     @action == 'pass'
+  end
+
+  def concerns?(server)
+    @network_sets.each do |ns|
+      if ns.host_ip_addrs.include?(server.ip_addr)
+        return true
+      end
+    end
+    return false
   end
   
 end

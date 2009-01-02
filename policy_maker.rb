@@ -18,14 +18,14 @@ class PolicyMaker
 
   def generate_solaris_policies
     generate_policies
-    write_solaris_files
+    write_solaris_policy_files
   end
   
-  def write_solaris_files
+  def write_solaris_policy_files
   end
   
   def generate_policies
-    @servers.each { |s| create_policy_for(s) }
+    @servers.each { |s| generate_policy_for(s) }
   end
     
   def policy_for(server_name)
@@ -34,8 +34,21 @@ class PolicyMaker
   
   protected
   
-  def create_policy_for(server)
-    @policies[server.name] = PepPolicy.new
+  def generate_policy_for(server)
+    ip = server.ip_addr
+    policy = PepPolicy.new
+    @policies[server.name] = policy
+    defs = @policy_definitions.select { |p| p.concerns?(server) }
+    defs.each do |policy_def|
+      policy_def.network_sets.each do |ns_src|
+        direction = ns_src.includes_ip_addr(ip) ? 'from' : 'to'
+        policy_def.network_sets.select { |ns| ns != ns_src }.each do |ns_dst|
+          if ns_src.includes_ip_addr(ip) || ns_dst.includes_ip_addr(ip)
+            policy.add_rule(direction, ip, ns_src, ns_dst)
+          end
+        end
+      end
+    end          
   end
     
 end

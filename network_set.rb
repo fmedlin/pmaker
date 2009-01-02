@@ -24,7 +24,7 @@ class NetworkSet
       if start_ip.instance_of?(ServerPep)
         @host_ip_addrs << start_ip.ip_addr
       else
-        @host_ip_addrs << IPAddr.new(start_ip)
+        @host_ip_addrs << IPAddr.new(start_ip == '*' ? '0.0.0.0' : start_ip)
       end
     end
   end
@@ -48,4 +48,9 @@ class NetworkSet
   def is_subnet?(ip_addr)
     ip_addr.instance_of?(String) && ip_addr.split('/')[1].to_i == 24
   end
+  
+  def includes_ip_addr(ip_addr)
+    @host_ip_addrs.include?(ip_addr)
+  end
+  
 end

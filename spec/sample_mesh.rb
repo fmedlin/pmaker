@@ -12,6 +12,7 @@ ns3 = network_set sinatra
 ns4 = network_set '10.10.100.1'
 ns5 = network_set_range '10.10.101.1', '10.10.101.5'
 ns6 = network_set '10.10.102.0/24' #only /24 networks are supported
+ns_all = network_set '*'
 
 # policies - policy files are only generated for defined servers
 policy_mesh 'encrypt',
@@ -21,9 +22,9 @@ policy_mesh 'encrypt',
     :auth_key => '987654',
 	  :network_sets => [ns1, ns2, ns3] }
 
-policy_mesh 'drop', { :network_sets => [ns1, ns2, ns3] }
+policy_mesh 'drop', { :network_sets => [ns1, ns2] }
 policy_mesh 'pass', { :network_sets => [ns1, ns4] }
-policy_mesh 'pass', { :network_sets => [ns2, '*'] }
+policy_mesh 'pass', { :network_sets => [ns2, ns_all] }
 
 generate_solaris_policies
 

@@ -19,10 +19,6 @@ describe PolicyMaker do
     ipaddrs.include?(IPAddr.new('192.168.1.3')).should be_true
   end  
   
-  it "should add policy definitions" do
-    @policy_defs.size.should equal(4)
-  end
-  
   it "should create encrypt, drop and clear policies" do
     encrypt_policy = @policy_defs.select { |p| p.encrypt? }
     encrypt_policy.size.should equal(1)
@@ -42,8 +38,9 @@ describe PolicyMaker do
   end
   
   it "should generate encrypt policies for each server pep only" do
-    policy = @pmaker.policy_for('rush')
+    policy = @pmaker.policy_for('sinatra')
     policy.instance_of?(PepPolicy).should be_true
+    policy.rules.size.should equal(4)
   end
   
   it "should generate drop policies for each server pep only"
@@ -56,7 +53,7 @@ describe PolicyMaker do
   describe "network sets" do
     
     it "should be created" do
-      @network_sets.size.should equal(6)
+      @network_sets.size.should equal(7)
     end
 
     it "should be created from server peps" do
@@ -78,6 +75,18 @@ describe PolicyMaker do
     
   end
   
+  # policy definitions
+  describe "policy definitions" do
+    
+    it "should detect server peps" do
+      @policy_defs.first.concerns?(ServerPep.new('unnamed', '192.168.1.1')).should be_true
+    end
+    
+    it "should add policy definitions" do
+      @policy_defs.size.should equal(4)
+    end
+
+  end
 end
 
   
