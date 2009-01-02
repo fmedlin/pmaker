@@ -7,7 +7,7 @@ class PepPolicy
     @rules = []
   end
   
-  def add_rule(direction, ip, ns_src, ns_dst)
+  def add_rule(direction, ip, ns_src, ns_dst, defs)
     @rules << PolicyRule.new
   end
 end
