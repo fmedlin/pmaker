@@ -3,7 +3,7 @@ require 'spec'
 
 require File.dirname(__FILE__) + '/sample_mesh.rb'
 
-describe PolicyMaker, "with sample mesh policy" do
+describe PolicyMaker do
   
   before(:all) do
     @pmaker = PolicyMaker.instance
@@ -15,20 +15,9 @@ describe PolicyMaker, "with sample mesh policy" do
   it "should add server peps" do
     @servers.size.should equal(3)
     ipaddrs = @servers.collect { |pep| pep.ip_addr }
-    ipaddrs.include?('192.168.1.1').should be_true
-    ipaddrs.include?('192.168.1.3').should be_true
-  end
-
-  it "should add network sets" do
-    @network_sets.size.should equal(7)
-  end
-  
-  it "should create network sets from server peps" do
-    networks = @network_sets.collect { |ns| ns.network }
-    networks.include?('192.168.1.3').should be_true
-  end
-  
-  it "should understand subnet definition in network sets"
+    ipaddrs.include?(IPAddr.new('192.168.1.1')).should be_true
+    ipaddrs.include?(IPAddr.new('192.168.1.3')).should be_true
+  end  
   
   it "should add policy definitions" do
     @policy_defs.size.should equal(4)
@@ -54,7 +43,6 @@ describe PolicyMaker, "with sample mesh policy" do
   
   it "should generate encrypt policies for each server pep only" do
     policy = @pmaker.policy_for('rush')
-    policy.should_not be_nil
     policy.instance_of?(PepPolicy).should be_true
   end
   
@@ -63,6 +51,32 @@ describe PolicyMaker, "with sample mesh policy" do
   it "should generate clear policies for each server pep only"
   
   it "should create policy files for each server pep"
+  
+  # network sets
+  describe "network sets" do
+    
+    it "should be created" do
+      @network_sets.size.should equal(6)
+    end
+
+    it "should be created from server peps" do
+      networks = @network_sets.collect { |ns| ns.host_ip_addrs }
+      networks.flatten.include?(IPAddr.new('192.168.1.3')).should be_true
+    end
+    
+    it "should understand single host addresses" do
+      @pmaker.network_sets.first.host_ip_addrs.first.should == IPAddr.new('192.168.1.1')
+    end
+    
+    it "should understand host address ranges in network sets" do
+      @pmaker.network_sets[4].host_ip_addrs.size.should equal(5)
+    end
+
+    it "should understand subnets in network sets" do
+      @pmaker.network_sets[5].host_ip_addrs.size.should equal(253)
+    end
+    
+  end
   
 end
 
