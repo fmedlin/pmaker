@@ -10,6 +10,7 @@ describe PolicyMaker do
     @servers = @pmaker.servers
     @network_sets = @pmaker.network_sets
     @policy_defs = @pmaker.policy_definitions
+    @sinatra_policy = @pmaker.policy_for('sinatra')
   end
   
   it "should add server peps" do
@@ -38,9 +39,10 @@ describe PolicyMaker do
   end
   
   it "should generate encrypt policies for each server pep only" do
-    policy = @pmaker.policy_for('sinatra')
-    policy.instance_of?(PepPolicy).should be_true
-    policy.rules.size.should equal(4)
+    @sinatra_policy.instance_of?(PepPolicy).should be_true
+    @sinatra_policy.rules.size.should equal(4)
+    @sinatra_policy.rules.first.src_ip.should == IPAddr.new('192.168.1.1')
+    @sinatra_policy.rules.first.dst_ip.should == IPAddr.new('192.168.1.3')
   end
   
   it "should generate drop policies for each server pep only"
