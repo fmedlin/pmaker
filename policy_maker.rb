@@ -37,13 +37,13 @@ class PolicyMaker
   def generate_policy_for(server)
     ip = server.ip_addr
     policy = PepPolicy.new
-    defs = @policy_definitions.select { |p| p.concerns?(server) }
+    defs = @policy_definitions.select { |p| p.includes_server?(server) }
     defs.each do |policy_def|
       policy_def.network_sets.each do |ns_src|
         direction = ns_src.includes_ip_addr(ip) ? 'from' : 'to'
         policy_def.network_sets.select { |ns| ns != ns_src }.each do |ns_dst|
           if ns_src.includes_ip_addr(ip) || ns_dst.includes_ip_addr(ip)
-            policy.add_rule(direction, ip, ns_src, ns_dst, defs)
+            policy.add_rule(direction, ip, ns_src, ns_dst, policy_def)
           end
         end
       end

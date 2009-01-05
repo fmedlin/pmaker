@@ -11,6 +11,7 @@ describe PolicyMaker do
     @network_sets = @pmaker.network_sets
     @policy_defs = @pmaker.policy_definitions
     @sinatra_policy = @pmaker.policy_for('sinatra')
+    @elvis_policy = @pmaker.policy_for('elvis')
   end
   
   it "should add server peps" do
@@ -38,19 +39,27 @@ describe PolicyMaker do
     pep_policy.auth_alg.should == 'sha1'
   end
   
-  it "should generate encrypt policies for each server pep only" do
+  it "should only create policies for server peps" do
+    @pmaker.policies.size.should equal(@servers.size)
+    @pmaker.policy_for('unknown_server').should be_nil
+  end
+  
+  it "should generate encrypt policies for each server pep" do
     @sinatra_policy.instance_of?(PepPolicy).should be_true
-    @sinatra_policy.rules.size.should equal(4)
+    @sinatra_policy.encrypt_rules.size.should equal(4)
     @sinatra_policy.rules.first.src_ip.should == IPAddr.new('192.168.1.1')
     @sinatra_policy.rules.first.dst_ip.should == IPAddr.new('192.168.1.3')
   end
   
-  it "should generate drop policies for each server pep only"
+  it "should generate drop policies for each server pep only" do
+    @sinatra_policy.drop_rules.size.should equal(4)
+    @elvis_policy.drop_rules.size.should equal(4)
+  end
   
-  it "should generate clear policies for each server pep only"
-  
-  it "should create policy files for each server pep"
-  
+  it "should generate clear policies for each server pep only" do
+    @sinatra_policy.pass_rules.size.should equal(0)
+  end
+    
   # network sets
   describe "network sets" do
     
@@ -81,14 +90,32 @@ describe PolicyMaker do
   describe "policy definitions" do
     
     it "should detect server peps" do
-      @policy_defs.first.concerns?(ServerPep.new('unnamed', '192.168.1.1')).should be_true
+      @policy_defs.first.includes_server?(ServerPep.new('dont-care', '192.168.1.1')).should be_true
     end
     
     it "should add policy definitions" do
       @policy_defs.size.should equal(4)
     end
-
   end
+  
+  # solaris ipsecconf
+  describe "solaris ipsecconf files" do
+    
+    it "should be created for each server"
+    
+    it "should have correct ipsecconf formatting"
+    
+  end
+  
+  # solaris ipseckey
+  describe "solaris ipseckey files" do
+    
+    it "should be created for each server"
+    
+    it "should have correct ipseckey formatting"
+    
+  end
+  
 end
 
   

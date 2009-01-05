@@ -31,4 +31,17 @@ class PepPolicy
   def add_ip_rule(src, dst, defs)
     @rules << PolicyRule.new(src, dst, defs)
   end
+  
+  def drop_rules
+    @rules.select { |r| r.policy_def.drop? }
+  end
+
+  def encrypt_rules
+    @rules.select { |r| r.policy_def.encrypt? }
+  end
+
+  def pass_rules
+    @rules.select { |r| r.policy_def.pass? }
+  end
+  
 end

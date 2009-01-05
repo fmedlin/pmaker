@@ -23,7 +23,7 @@ class PolicyDefinition
     @action == 'pass'
   end
 
-  def concerns?(server)
+  def includes_server?(server)
     @network_sets.each do |ns|
       if ns.host_ip_addrs.include?(server.ip_addr)
         return true
