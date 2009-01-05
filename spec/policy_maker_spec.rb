@@ -101,7 +101,11 @@ describe PolicyMaker do
   # solaris ipsecconf
   describe "solaris ipsecconf files" do
     
-    it "should be created for each server"
+    it "should be created for each server" do
+      @servers.each do |s|
+        File.exist?(s.name + '.ipsecconf').should be_true
+      end
+    end
     
     it "should have correct ipsecconf formatting"
     
@@ -110,7 +114,11 @@ describe PolicyMaker do
   # solaris ipseckey
   describe "solaris ipseckey files" do
     
-    it "should be created for each server"
+    it "should be created for each server" do
+      @servers.each do |s|
+        File.exist?(s.name + '.ipseckey').should be_true
+      end
+    end
     
     it "should have correct ipseckey formatting"
     

@@ -22,6 +22,12 @@ class PolicyMaker
   end
   
   def write_solaris_policy_files
+    @policies.each_pair do |server_name, policy|
+      ipsecconf_filename = server_name + '.ipsecconf'
+      ipseckey_filename = server_name + '.ipseckey'
+      conf_file = File.new(ipsecconf_filename, File::CREAT|File::TRUNC|File::RDWR, 0644)
+      key_file = File.new(ipseckey_filename, File::CREAT|File::TRUNC|File::RDWR, 0644)
+    end      
   end
   
   def generate_policies
