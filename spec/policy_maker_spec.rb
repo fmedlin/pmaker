@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'spec'
 
+require File.dirname(__FILE__) + '/spec_helper.rb'
 require File.dirname(__FILE__) + '/sample_mesh.rb'
 
 describe PolicyMaker do
@@ -103,7 +104,9 @@ describe PolicyMaker do
       end
     end
     
-    it "should have correct ipsecconf formatting"
+    it "should have correct ipsecconf formatting" do
+      contents_of_file('elvis.ipsecconf').length.should_not == 0
+    end
     
   end
   
@@ -116,7 +119,15 @@ describe PolicyMaker do
       end
     end
     
-    it "should have correct ipseckey formatting"
+    it "should have correct ipseckey formatting" do
+      contents_of_file('elvis.ipseckey').length.should_not == 0
+    end
+    
+    it "should generate spis"
+    
+    it "should generate encryption keys"
+    
+    it "should create authentication keys"
     
   end
   

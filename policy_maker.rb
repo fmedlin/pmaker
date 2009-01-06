@@ -27,9 +27,29 @@ class PolicyMaker
       ipseckey_filename = server_name + '.ipseckey'
       conf_file = File.new(ipsecconf_filename, File::CREAT|File::TRUNC|File::RDWR, 0644)
       key_file = File.new(ipseckey_filename, File::CREAT|File::TRUNC|File::RDWR, 0644)
+      write_ipsecconf(conf_file, policy_for(server_name))
+      write_ipseckey(key_file, policy_for(server_name))
+      
+      conf_file.close
+      key_file.close
     end      
   end
   
+  def write_ipsecconf(f, policy)
+    policy.rules.each do |rule|
+      f << "rule\n"
+    end
+  end
+  
+  def write_ipseckey(f, policy)
+    policy.encrypt_rules.each do |rule|
+      f << "add esp spi todoAddSpiHere " <<
+        "src " << rule.src_ip << " dst " << rule.dst_ip << " " <<
+        "authalg " << rule.policy_def.auth_alg << " authkey " << "todoAddKeyHere" << " " <<
+        "encralg " << rule.policy_def.encrypt_alg << " encrkey " << "todoAddKeyHere" << "\n"
+    end
+  end
+
   def generate_policies
     @servers.each { |s| generate_policy_for(s) }
   end
