@@ -113,6 +113,10 @@ describe PolicyMaker do
   # solaris ipseckey
   describe "solaris ipseckey files" do
     
+    before(:all) do
+      @elvis_ipseckey = contents_of_file('elvis.ipseckey')
+    end
+    
     it "should be created for each server" do
       @servers.each do |s|
         File.exist?(s.name + '.ipseckey').should be_true
@@ -120,10 +124,13 @@ describe PolicyMaker do
     end
     
     it "should have correct ipseckey formatting" do
-      contents_of_file('elvis.ipseckey').length.should_not == 0
+      @elvis_ipseckey.length.should_not == 0
     end
     
-    it "should generate spis"
+    it "should generate spis" do
+      #@elvis_ipseckey.should include_match(/spi\s+0(x|X)\d+/)
+      @elvis_ipseckey.should include_match(/authalg/)
+    end
     
     it "should generate encryption keys"
     
