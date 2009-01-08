@@ -37,16 +37,17 @@ class PolicyMaker
   
   def write_ipsecconf(f, policy)
     policy.rules.each do |rule|
-      f << "rule\n"
+      f << rule.print_solaris_conf()
     end
   end
   
   def write_ipseckey(f, policy)
     policy.encrypt_rules.each do |rule|
-      f << "add esp spi todoAddSpiHere " <<
+      pdef = rule.policy_def
+      f << "add esp spi " << pdef.spi << " " <<
         "src " << rule.src_ip << " dst " << rule.dst_ip << " " <<
-        "authalg " << rule.policy_def.auth_alg << " authkey " << "todoAddKeyHere" << " " <<
-        "encralg " << rule.policy_def.encrypt_alg << " encrkey " << "todoAddKeyHere" << "\n"
+        "authalg " << pdef.auth_alg << " authkey " << pdef.auth_key << " " <<
+        "encralg " << pdef.encrypt_alg << " encrkey " << pdef.encrypt_key << "\n"
     end
   end
 
