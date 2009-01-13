@@ -3,9 +3,10 @@ require 'server_pep'
 class PolicyDefinition
   attr_accessor :topology, :action
   attr_accessor :encrypt_alg, :auth_alg
+  attr_accessor :encrypt_key, :auth_key
   attr_accessor :network_sets
   
-  @@spi = 1
+  @@spi = 0
   
   def initialize(topology, action, options)
     @topology = topology
@@ -35,16 +36,8 @@ class PolicyDefinition
   end
   
   def spi
-    spi = (@@spi += 1).to_s(base=16)
-    "0x#{spi}"
-  end
-  
-  def auth_key
-    'authkey'
-  end
-
-  def encrypt_key
-    'encrkey'
+    @spi = (@@spi += 1).to_s(base=16) if @spi.nil?
+    "0x#{@spi}"
   end
   
 end

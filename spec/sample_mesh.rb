@@ -17,7 +17,7 @@ ns_all = network_set '*'
 policy_mesh 'encrypt',
   { :encrypt_alg => 'aes',
     :encrypt_key => '0123456',
-    :auth_alg => 'sha1',
+    :auth_alg => 'hmac-sha1',
     :auth_key => '987654',
 	  :network_sets => [ns1, ns2, ns3] }
 

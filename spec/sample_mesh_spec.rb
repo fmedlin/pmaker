@@ -130,11 +130,7 @@ describe PolicyMaker do
     it "should generate spis" do
       @elvis_ipseckey.should include_match(/spi\s+0(x|X)(\d|[a-f])+/)
     end
-    
-    it "should generate encryption keys"
-    
-    it "should create authentication keys"
-    
+        
   end
   
 end
