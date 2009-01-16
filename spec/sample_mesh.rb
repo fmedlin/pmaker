@@ -1,9 +1,9 @@
 require 'policy_maker'
 
 # server definitions
-rush = server_pep 'rush', '192.168.1.1'
-elvis = server_pep 'elvis', '192.168.1.2'
-sinatra = server_pep 'sinatra', '192.168.1.3'
+rush = server_pep 'rush', '192.168.2.76'
+elvis = server_pep 'elvis', '192.168.2.121'
+sinatra = server_pep 'sinatra', '192.168.2.122'
 
 # network set definitions
 ns1 = network_set rush
@@ -16,9 +16,9 @@ ns_all = network_set '*'
 
 policy_mesh 'encrypt',
   { :encrypt_alg => 'aes',
-    :encrypt_key => '0123456',
+    :encrypt_key => '29dc32fad62af71e99e730b4115cb563',
     :auth_alg => 'hmac-sha1',
-    :auth_key => '987654',
+    :auth_key => 'c9cd510dced1aa66fede4481eb5e62f60596fd85',
 	  :network_sets => [ns1, ns2, ns3] }
 
 policy_mesh 'drop', { :network_sets => [ns1, ns2, ns3] }
