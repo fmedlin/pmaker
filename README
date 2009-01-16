@@ -1,3 +1,17 @@
+
+Known Issues
+------------
+
+Solaris will reject duplicate selectors, so make sure there aren't multiple rules having the same selector. For example, don't create an encrypt policy between two hosts followed by a drop policy for the same hosts.
+
+There is a limitation in ipsecconf when using the -a arg to load policies from file. It seems like there is ~120 policy limit on the file. Files that are too large will segfault. One workaround is to use csplit to separate the policy file into 100 line pieces.
+
+Currently, a wildcard ('*') results in a 0.0.0.0 in a solaris ipsecconf file. That is not correct syntax and needs to be fixed.
+
+
+Example Policy
+--------------
+
 require 'policy_maker'
 
 # server definitions
@@ -10,7 +24,7 @@ ns1 = network_set rush
 ns2 = network_set elvis
 ns3 = network_set sinatra
 ns4 = network_set '10.10.100.1'                      # 1 host
-ns5 = network_set_range '10.10.101.1', '10.10.101.5' # 4 hosts
+ns5 = network_set_range '10.10.101.1', '10.10.101.5' # 5 hosts
 ns6 = network_set '10.10.102.0/24'                   # 253 hosts
 ns_all = network_set '*'
 
@@ -21,7 +35,8 @@ policy_mesh 'encrypt',
     :auth_key => 'c9cd510dced1aa66fede4481eb5e62f60596fd85',
 	  :network_sets => [ns1, ns2, ns3] }
 
-policy_mesh 'drop', { :network_sets => [ns1, ns2, ns3] }
+policy_mesh 'drop', { :network_sets => [ns2, ns5] }
+policy_mesh 'drop', { :network_sets => [ns3, ns4] }
 policy_mesh 'pass', { :network_sets => [ns1, ns4] }
 policy_mesh 'pass', { :network_sets => [ns2, ns_all] }
 
